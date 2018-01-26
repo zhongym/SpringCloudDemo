@@ -11,4 +11,4 @@ eureka:
     leaseExpirationDurationInSeconds: 5 #从注册中心剔除服务的检测间隔  这里配置30 默认90秒
   client:
     service-url:
-      defaultZone: http://localhost:8000/eureka/  #,http://www.zym.com:9000/eureka/
+      defaultZone: http://localhost:7022/eureka/  #,http://www.zym.com:9000/eureka/

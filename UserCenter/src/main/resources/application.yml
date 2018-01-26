@@ -4,11 +4,33 @@ server:
 spring:
   application:
     name: userCenter
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true #开启重试机制 （默认关闭）
 
 eureka:
   instance:
-    leaseRenewalIntervalInSeconds: 5 #心跳间隔  这里配置 10 默认是30秒
-    leaseExpirationDurationInSeconds: 5 #从注册中心剔除服务的检测间隔  这里配置30 默认90秒
+    leaseRenewalIntervalInSeconds: 5 #心跳间隔 【服务提供者】每隔多少s向【服务注册中心】发起心跳请求  默认是30秒
+    leaseExpirationDurationInSeconds: 5 #从注册中心剔除服务的失效时间（当【服务注册中心】在这个失效时间没有收到【服务提供者】的心跳，就会从服务列表中移除当前服务）  默认90秒
   client:
     service-url:
-      defaultZone: http://localhost:8000/eureka/  #,http://www.zym.com:9000/eureka/
+      defaultZone: http://localhost:7022/eureka/ #,http://www.zym.com:7011/eureka/
+    register-with-eureka: true # 如果应用是【服务提供者】 是否注册到eureka服务中心，(如果单单只是【服务消费者】，可以不注册到服务中心)
+    fetch-registry: true  # 如果应用是【服务消费者】，要设置为true
+    registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
+
+# 客户端重试机制
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 200 #如果配置了断路器，则断路器的超时时间一定要大于Ribbon的超时时间，否则不会触发重试
+
+ribbon: # 全局配置（要先打开spring.cloud.loadbalancer.retry.enable=true），如果想为某个实例配置，需要在ribbon前面加服务名（<服务名>.ribbon.<key>=<value>
+  ConnectTimeout: 200
+  ReadTimeout: 150
+  OkToRetryOnAllOperations: true #读所有的请求都进行重试
+  MaxAutoRetriesNextServer: 2  #切换实例的重试次数
+  MaxAutoRetries: 1 #对当前实例的重试次数
+
+logging:
+  level:
+    root: debug
+

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 /**
  * Created by zhong on 2017/9/5.
  */
@@ -16,12 +18,16 @@ public class ActivityController {
 
     @Value("${server.port}")
     private Long port;
+
     @GetMapping("/{activityId}")
-    public Activity get(@PathVariable("activityId") Long activityId) {
+    public Activity getByActivityId(@PathVariable("activityId") Long activityId) throws InterruptedException {
         Activity activity = new Activity();
         activity.setActivityId(port);
         activity.setName("活动名称");
         activity.setCode("zs-12");
+
+        System.out.println("--------------------------------------->");
+//        Thread.sleep(new Random().nextInt(300));
         return activity;
     }
 }

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: turbine
+
+
+server:
+  port: 8040
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7022/eureka/
+
+turbine:
+  app-config: userCenter,activityCenter #指定要监控的服务名
+  combine-host-port: true
+

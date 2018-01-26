@@ -2,13 +2,17 @@ server:
   port: 7011
 
 eureka:
+  server:       #配置关闭自我保护，并按需配置Eureka Server清理无效节点的时间间隔。
+      enable-self-preservation: false        #关掉自我保护
+      eviction-interval-timer-in-ms: 3000   # 清理间隔（单位毫秒，默认是60*1000）
   instance:
     hostname: www.zym.com
+    instance-id: ${spring.application.name} - ${eureka.instance.hostname} -${server.port} # 实例id
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8000/eureka/
+      defaultZone: http://localhost:7022/eureka/
 
 spring:
   application:

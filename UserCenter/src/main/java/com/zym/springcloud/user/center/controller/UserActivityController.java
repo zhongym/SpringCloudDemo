@@ -4,6 +4,7 @@ import com.zym.springcloud.user.center.activityCenter.ActivityService;
 import com.zym.springcloud.user.center.activityCenter.domain.Activity;
 import com.zym.springcloud.user.center.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 @RequestMapping("/api/user/activity/")
 public class UserActivityController {
 
+    @Qualifier("activityServiceRibbonClient")
     @Autowired
     private ActivityService activityService;
 
@@ -24,7 +26,7 @@ public class UserActivityController {
     public Map<String, Object> getUserActivity() {
         User user = new User();
         user.setUserId(12L);
-        Activity activity = activityService.get(123L);
+        Activity activity = activityService.getByActivityId(123L);
         Map<String, Object> map = new HashMap<>();
         map.put("user", user);
         map.put("activity", activity);
