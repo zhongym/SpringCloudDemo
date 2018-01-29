@@ -21,13 +21,17 @@ eureka:
     registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
 
 # 客户端重试机制
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 200 #如果配置了断路器，则断路器的超时时间一定要大于Ribbon的超时时间，否则不会触发重试
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 800 #断路器的超时时间。 如果配置了断路器，则断路器的超时时间一定要大于Ribbon的超时时间，否则hystrix命令超时后，该命令直接熔断，重试机制就没有意义了
+
+feign:
+  hystrix:
+    enabled: true #使用feign时要配置这个才能开启hystrix
 
 ribbon: # 全局配置（要先打开spring.cloud.loadbalancer.retry.enable=true），如果想为某个实例配置，需要在ribbon前面加服务名（<服务名>.ribbon.<key>=<value>
   ConnectTimeout: 200
   ReadTimeout: 150
   OkToRetryOnAllOperations: true #读所有的请求都进行重试
-  MaxAutoRetriesNextServer: 2  #切换实例的重试次数
+  MaxAutoRetriesNextServer: 1  # 最大重试服务器数量(不包括第一台服务器)
   MaxAutoRetries: 1 #对当前实例的重试次数
 
 logging:

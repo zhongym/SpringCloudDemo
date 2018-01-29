@@ -2,6 +2,7 @@ package com.zym.springcloud.user.center.controller;
 
 import com.zym.springcloud.user.center.activityCenter.ActivityService;
 import com.zym.springcloud.user.center.activityCenter.domain.Activity;
+import com.zym.springcloud.user.center.activityCenter.impl.ActivityServiceFeignClient;
 import com.zym.springcloud.user.center.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,13 +21,23 @@ public class UserActivityController {
 
     @Qualifier("activityServiceRibbonClient")
     @Autowired
-    private ActivityService activityService;
+    private ActivityService activityServiceRibbonClient;
+
+    @Autowired
+    private ActivityServiceFeignClient activityServiceFeignClient;
 
     @RequestMapping("/get")
-    public Map<String, Object> getUserActivity() {
+    public Map<String, Object> getUserActivity(String type) {
+
+        Activity activity = null;
+        if ("ribbon".equals(type)) {
+            activity = activityServiceRibbonClient.getByActivityId(123L);
+        } else {
+            activity = activityServiceFeignClient.getByActivityId(123L);
+        }
         User user = new User();
         user.setUserId(12L);
-        Activity activity = activityService.getByActivityId(123L);
+
         Map<String, Object> map = new HashMap<>();
         map.put("user", user);
         map.put("activity", activity);

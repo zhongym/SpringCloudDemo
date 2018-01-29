@@ -27,7 +27,7 @@ public class ActivityController {
         activity.setCode("zs-12");
 
         System.out.println("--------------------------------------->");
-//        Thread.sleep(new Random().nextInt(300));
+        Thread.sleep(500);
         return activity;
     }
 }
