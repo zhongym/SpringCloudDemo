@@ -3,4 +3,4 @@ server:
 
 spring:
   application:
-    name: userCenter
+    name: api-getway
