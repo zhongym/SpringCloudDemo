@@ -26,14 +26,20 @@
     </properties>
 
     <dependencies>
-        <!--新版spingcloud Finchley.RELEASE 在支持spring 2.0时修改了eureka的jar包，把之前netflix系列的jar引入的时候都加上了netflix-->
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
+        <!--新版spingcloud Finchley.RELEASE 在支持spring 2.0时修改了eureka的jar包，把之前netflix系列的jar引入的时候都加上了netflix-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
 
         <dependency>

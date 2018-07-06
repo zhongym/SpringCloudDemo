@@ -2,6 +2,13 @@ server:
   port: 80
 
 spring:
+  redis:
+    host: 127.0.0.1
+    password: u2CVLsHGYn4dVh6M4qTMr17iaQk
+    pool:
+      maxIdle: 5
+      minIdle: 2
+
   application:
     name: gateway
   cloud:
@@ -18,6 +25,17 @@ spring:
             - Path=/userCenter/**
         filters:
            - RewritePath=/userCenter/(?<segment>.*), /$\{segment}
+           - name: RequestRateLimiter
+             args:
+                redis-rate-limiter.replenishRate: 1 # 令牌桶的容积
+                redis-rate-limiter.burstCapacity: 1 # 流速 每秒
+                key-resolver: "#{@apiKeyResolver}" #SPEL表达式去的对应的bean
+      default-filters:
+      - name: RequestRateLimiter
+        args:
+          redis-rate-limiter.replenishRate: 1 # 令牌桶的容积
+          redis-rate-limiter.burstCapacity: 1 # 流速 每秒
+          key-resolver: "#{@apiKeyResolver}" #SPEL表达式去的对应的bean
 eureka:
   client:
     service-url:
