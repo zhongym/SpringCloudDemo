@@ -27,7 +27,10 @@ public class ActivityController {
         activity.setCode("zs-12");
 
         System.out.println("--------------------------------------->");
-        Thread.sleep(500);
+        if (true){
+            throw new RuntimeException("");
+        }
+//        Thread.sleep(500);
         return activity;
     }
 }

@@ -10,10 +10,10 @@ eureka:
     #prefer-ip-address: true # 使用ip来定义注册中心的地址
     instance-id: ${spring.application.name} - ${eureka.instance.hostname} -${server.port} # 实例id
   client:
-    register-with-eureka: true #
+    register-with-eureka: false #
     fetch-registry: true #
-    service-url:
-      defaultZone: http://www.zym.com:7011/eureka/
+ #   service-url:
+ #     defaultZone: http://www.zym.com:7011/eureka/
 
 spring:
   application:

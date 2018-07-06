@@ -4,3 +4,59 @@ server:
 spring:
   application:
     name: api-getway
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 5 #心跳间隔  这里配置 10 默认是30秒
+    leaseExpirationDurationInSeconds: 5 #从注册中心剔除服务的检测间隔  这里配置30 默认90秒
+  client:
+    service-url:
+      defaultZone: http://localhost:7022/eureka/ #,http://www.zym.com:9000/eureka/
+
+# 默认zuul会过滤掉"Cookie", "Set-Cookie", "Authorization"请求头信息，可以手动设置zuul.sensitive-headers的值过滤某些头信息
+# 也可以给某个应用过滤  zuul.routes.服务名.sensitive-headers= ,或者禁用过滤  zuul.routes.服务名.customSensitiveHeaders=true
+#zuul:
+#  sensitive-headers: ~
+
+
+#服务器默认的规则，zuul接入eureka后，会为eureka的每个服务都自动配置一条默认路由规则  zuul.routes.服务名=服务名（服务名小写）/**
+# 可以使用zuul.services=* 禁用默认生成的规则，或者zuul.services=服务名1,服务名2 禁用某些服务的默认规则【服务名小写】
+#zuul:
+#  ignored-services: usercenter
+
+
+#面向服务的路由 【访问http://127.0.0.1/userCenter/api/user/123 跳转到http://userCenter/api/user/123】
+zuul:
+  routes:
+    userCenter:
+      path: /userCenter/**
+      serviceId: userCenter
+#
+# 简单的面向服务的路由 配置方式
+#zuul.routes.服务名=path/**
+
+
+
+#传统路由 单实例  【访问http://127.0.0.1/userCenter/api/user/123 跳转到http://127.0.0.1:8010/api/user/123】
+#zuul:
+#  routes:
+#    userCenter:
+#      path: /userCenter/**
+#      url: http://127.0.0.1:8010/
+#      面向服务的路由 【访问http://127.0.0.1/userCenter/api/user/123 跳转到http://userCenter/api/user/123】
+
+
+#传统路由 多实例  【访问http://127.0.0.1/userCenter/api/user/123 跳转到http://127.0.0.1:8010/api/user/123】
+#zuul:
+#  routes:
+#    userCenter:
+#      path: /userCenter/**
+#      serviceId: userCenter
+#userCenter:
+#  ribbon:
+#    listOfServers: http://127.0.0.1:8010/,http://127.0.0.1:8011/
+#ribbon:
+#  eureka:
+#    enabled: false
+
+
