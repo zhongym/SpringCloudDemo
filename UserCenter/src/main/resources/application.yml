@@ -20,6 +20,7 @@ eureka:
     fetch-registry: true  # 如果应用是【服务消费者】，要设置为true
     registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
 
+
 # 客户端重试机制
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 800 #断路器的超时时间。 如果配置了断路器，则断路器的超时时间一定要大于Ribbon的超时时间，否则hystrix命令超时后，该命令直接熔断，重试机制就没有意义了
 
