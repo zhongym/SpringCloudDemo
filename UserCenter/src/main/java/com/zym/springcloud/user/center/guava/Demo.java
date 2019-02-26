@@ -1,15 +1,25 @@
 package com.zym.springcloud.user.center.guava;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.CacheStats;
-import com.google.common.cache.LoadingCache;
+import com.google.common.cache.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Demo {
     public static void main(String[] args) throws Exception {
+        Cache<String, String> CACHE =
+                CacheBuilder.newBuilder()
+                        .softValues()
+                        .recordStats()
+                        .expireAfterWrite(1, TimeUnit.SECONDS)
+                        .build();
+
+        CACHE.put("a","b");
+        System.out.println(CACHE.getIfPresent("a"));
+        Thread.sleep(1000);
+        System.out.println(CACHE.getIfPresent("a"));
+
         LoadingCache<Long, AtomicInteger> counter = CacheBuilder.newBuilder()
                 //缓存回收策略/基于容量
                 .maximumSize(100)
@@ -22,7 +32,7 @@ public class Demo {
                 .build(new CacheLoader<Long, AtomicInteger>() {
                     @Override
                     public AtomicInteger load(Long key) {
-                        return new AtomicInteger(0);
+                        return null;
                     }
                 });
 

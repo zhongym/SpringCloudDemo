@@ -95,12 +95,12 @@ public class CompletableFutureDemo {
 
 
         //异步分批查询
+        long s = System.currentTimeMillis();
         List<CompletableFuture<List<Long>>> futureList = Lists.newArrayList(1L, 2L)
                 .stream()
                 .map(id -> CompletableFuture.supplyAsync(() -> demo.getBillId(id)))
                 .collect(Collectors.toList());
 
-        //获取两个结果最快的一个
         CompletableFuture<Void> future = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
         future.get(1, TimeUnit.SECONDS);
 
@@ -115,6 +115,8 @@ public class CompletableFutureDemo {
                 })
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+        long e = System.currentTimeMillis();
+        System.out.println("花费:" + (e - s));
         System.out.println(collect);
 
     }
@@ -122,7 +124,7 @@ public class CompletableFutureDemo {
     public List<Long> getBillId(Long storeId) {
         try {
             if (storeId.equals(1L)) {
-                Thread.sleep(50);
+                Thread.sleep(400);
             } else {
                 Thread.sleep(500);
             }
