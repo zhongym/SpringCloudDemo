@@ -27,7 +27,7 @@ public class RedissonDemo {
         long l1 = aLong.incrementAndGet();
         System.out.println(l);
 
-        RMap<Object, Object> map = client.getMap("map");
+        RMap<Object, Object> map = client.getMap("map",MapOptions.defaults());
         map.put("zs", new Student("zsss"));
         map.put("ls", new Student("zsss"));
 

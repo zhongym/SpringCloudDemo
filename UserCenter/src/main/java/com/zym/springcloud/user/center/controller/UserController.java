@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -31,13 +32,23 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @GetMapping("/{userId}")
     public User get(@PathVariable("userId") Long userId) {
+        a(request);
         User user = new User();
         user.setUserId(130L);
         user.setUserName("port:" + discoveryClient.getLocalServiceInstance().getPort());
         System.out.println(discoveryClient.getLocalServiceInstance().getHost());
         return user;
+    }
+
+    private void a(HttpServletRequest request){
+        System.out.println(request instanceof HttpServletRequest);
+        System.out.println(request.getClass());
+        request.getSession();
     }
 
     @GetMapping("/save")
