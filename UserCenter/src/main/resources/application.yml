@@ -8,6 +8,9 @@ spring:
     loadbalancer:
       retry:
         enabled: true #开启重试机制 （默认关闭）
+  mvc:
+    servlet:
+      load-on-startup: 0
 
 eureka:
   instance:

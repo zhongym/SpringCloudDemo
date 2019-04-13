@@ -3,10 +3,23 @@ package com.zym.springcloud.user.center.jdk;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockDemo {
-    public static void main(String[] args) {
-        ReentrantLock lock = new ReentrantLock();
+
+    static ReentrantLock lock = new ReentrantLock(true);
+
+    public static void main(String[] args) throws InterruptedException {
+
         lock.lock();
-        lock.tryLock();
+        System.out.println("main");
+
+        new Thread(()->{
+            lock.lock();
+            System.out.println("suThread");
+            lock.unlock();
+        }).start();
+
+        Thread.sleep(10000);
+
+        lock.unlock();
 
     }
 }
