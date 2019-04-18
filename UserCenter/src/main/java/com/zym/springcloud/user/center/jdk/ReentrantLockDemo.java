@@ -1,12 +1,17 @@
 package com.zym.springcloud.user.center.jdk;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockDemo {
 
     static ReentrantLock lock = new ReentrantLock(true);
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
+
+        Thread.sleep(1000000000);
+
 
         lock.lock();
         System.out.println("main");
