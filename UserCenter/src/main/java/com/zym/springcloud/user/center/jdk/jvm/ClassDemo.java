@@ -1,4 +1,6 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.jvm;
+
+import com.zym.springcloud.user.center.jdk.StringDemo;
 
 import java.io.Serializable;
 

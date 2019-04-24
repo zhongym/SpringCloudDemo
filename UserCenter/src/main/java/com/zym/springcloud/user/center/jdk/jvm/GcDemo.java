@@ -1,4 +1,4 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.jvm;
 
 /**
  * -Xms40m -Xmx40m -Xmn10m -XX:+PrintGCDetails -XX:MetaspaceSize=1m -XX:MaxMetaspaceSize=4m

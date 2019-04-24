@@ -1,4 +1,4 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.jvm;
 
 public class LooadDemo2 {
 

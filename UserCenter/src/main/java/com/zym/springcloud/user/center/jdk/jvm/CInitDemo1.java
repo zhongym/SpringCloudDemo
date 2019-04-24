@@ -1,4 +1,4 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.jvm;
 
 public class CInitDemo1 {
 
@@ -12,7 +12,7 @@ public class CInitDemo1 {
         /**
          * java.lang.ExceptionInInitializerError
          * Caused by: java.lang.RuntimeException:
-         * 	at com.zym.springcloud.user.center.jdk.CInitDemo1.<clinit>(CInitDemo1.java:7)
+         * 	at com.zym.springcloud.user.center.jdk.jvm.CInitDemo1.<clinit>(CInitDemo1.java:7)
          */
         //证明 static{}组合在 CInitDemo1.<clinit>()方法
 

@@ -1,10 +1,7 @@
-package com.zym.springcloud.user.center.jdk;
-
-import org.springframework.util.FileCopyUtils;
+package com.zym.springcloud.user.center.jdk.jvm;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class ClassLoaderDemo {
 
@@ -45,7 +42,7 @@ public class ClassLoaderDemo {
 
     private static void unloadClass() throws ClassNotFoundException {
         MyClassLoader myClassLoader = new MyClassLoader();
-        Class<?> aClass2 = myClassLoader.loadClass("com.zym.springcloud.user.center.jdk.ClassDemo");
+        Class<?> aClass2 = myClassLoader.loadClass("com.zym.springcloud.user.center.jdk.jvm.ClassDemo");
         aClass2 = null;
         myClassLoader=null;
 
@@ -55,7 +52,7 @@ public class ClassLoaderDemo {
         System.out.println("");
 
         /**
-         * [Unloading class com.zym.springcloud.user.center.jdk.ClassDemo 0x00000007c0062218]
+         * [Unloading class com.zym.springcloud.user.center.jdk.jvm.ClassDemo 0x00000007c0062218]
          */}
 
     private static void test1() throws ClassNotFoundException {
@@ -64,7 +61,7 @@ public class ClassLoaderDemo {
                 ".ClassDemo");
 
         MyClassLoader myClassLoader = new MyClassLoader();
-        Class<?> aClass2 = myClassLoader.loadClass("com.zym.springcloud.user.center.jdk.ClassDemo");
+        Class<?> aClass2 = myClassLoader.loadClass("com.zym.springcloud.user.center.jdk.jvm.ClassDemo");
 
 
         System.out.println(aClass == aClass1);
@@ -78,7 +75,7 @@ public class ClassLoaderDemo {
 
         //应用程序加载器
         ClassLoader loader = ClassLoader.getSystemClassLoader();
-        Class<?> aClass = loader.loadClass("com.zym.springcloud.user.center.jdk.LooadDemo");
+        Class<?> aClass = loader.loadClass("com.zym.springcloud.user.center.jdk.jvm.LooadDemo");
         System.out.println(aClass);
 
         ClassLoader parent = loader.getParent();
@@ -90,13 +87,13 @@ public class ClassLoaderDemo {
         int a = LooadDemo.A;
 
 
-        Class<?> aClass2 = Class.forName("com.zym.springcloud.user.center.jdk.LooadDemo");
+        Class<?> aClass2 = Class.forName("com.zym.springcloud.user.center.jdk.jvm.LooadDemo");
 
 
         MyClassLoader myLoader = new MyClassLoader();
         ClassLoader parent2 = myLoader.getParent();
 
-        Class<?> bClass = myLoader.loadClass("com.zym.springcloud.user.center.jdk.LooadDemo");
+        Class<?> bClass = myLoader.loadClass("com.zym.springcloud.user.center.jdk.jvm.LooadDemo");
         System.out.println(bClass);
 
         Class<?> aClass3 = myLoader.loadClass("com.zym.springcloud.activity.center.domain.Activity");
