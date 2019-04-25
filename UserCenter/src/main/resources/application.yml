@@ -14,8 +14,8 @@ spring:
 
 eureka:
   instance:
-    leaseRenewalIntervalInSeconds: 5 #心跳间隔 【服务提供者】每隔多少s向【服务注册中心】发起心跳请求  默认是30秒
-    leaseExpirationDurationInSeconds: 5 #从注册中心剔除服务的失效时间（当【服务注册中心】在这个失效时间没有收到【服务提供者】的心跳，就会从服务列表中移除当前服务）  默认90秒
+    leaseRenewalIntervalInSeconds: 30 #心跳间隔 【服务提供者】每隔多少s向【服务注册中心】发起心跳请求  默认是30秒
+    leaseExpirationDurationInSeconds: 90 #从注册中心剔除服务的失效时间（当【服务注册中心】在这个失效时间没有收到【服务提供者】的心跳，就会从服务列表中移除当前服务）  默认90秒
   client:
     service-url:
       defaultZone: http://localhost:7022/eureka/ #,http://www.zym.com:7011/eureka/
@@ -24,21 +24,76 @@ eureka:
     registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
 
 
-# 客户端重试机制
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 800 #断路器的超时时间。 如果配置了断路器，则断路器的超时时间一定要大于Ribbon的超时时间，否则hystrix命令超时后，该命令直接熔断，重试机制就没有意义了
+# 配置hystrix的参数  https://github.com/Netflix/Hystrix/wiki/Configuration#execution.isolation.semaphore.maxConcurrentRequests
+hystrix:
+  command:
+    ActivityServiceFeignClient#getByActivityId(Long):
+      #执行配置
+      execution:
+        timeout:
+          enabled: true #是否开启超时，默认是true，开启
+        isolation:
+          strategy: SEMAPHORE # 隔离策略 THREAD=线程 ， SEMAPHORE=信号量
+          thread:
+            timeoutInMilliseconds: 100 #用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。
+            interruptOnTimeout: true #发生超时是是否中断线程，默认是true
+          semaphore:
+            #maxConcurrentRequests是一个绝对值，无时间窗口，相当于亚毫秒级的，指任意时间点允许的并发数。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。:
+            maxConcurrentRequests: 100
+
+      #熔断器配置
+      circuitBreaker:
+        enabled: true #是否启用熔断器，默认是TURE。
+        forceOpen: false  #熔断器强制打开，始终保持打开状态。默认值FLASE
+        forceClosed: false  #熔断器强制关闭，始终保持打关闭状态。默认值FLASE
+        # [metrics.rollingStats.timeInMilliseconds] 秒内，有超过[requestVolumeThreshold]个请求，如果错误率大于[errorThresholdPercentage]%，就会熔断
+        #默认值20.意思是至少有20个请求才进行errorThresholdPercentage错误百分比计算。比如一段时间（10s）内有19个请求全部失败了。错误百分比是100%，但熔断器不会打开，因为requestVolumeThreshold的值是20. 这个参数非常重要，熔断器是否打开首先要满足这个条件，
+        requestVolumeThreshold: 10
+        # 设定错误百分比，默认值50%，例如一段时间（10s）内有100个请求，其中有55个超时或者异常返回了，那么这段时间内的错误百分比是55%，大于了默认值50%，这种情况下触发熔断器-打开。
+        errorThresholdPercentage: 30
+        # 熔断后的重试时间窗口，且在该时间窗口内只允许一次重试。即在熔断开关打开后，在该时间窗口允许有一次重试，如果重试成功，则将重置Health 采样统计并闭合熔断开关实现快速恢复，否则熔断开关还是打开状态，执行快速失败。
+        sleepWindowInMilliseconds: 10000
+
+      #设置关于HystrixCommand执行需要的统计信息
+      metrics:
+        healthSnapshot:
+          intervalInMilliseconds: 500 #记录health 快照（用来统计成功和错误绿）的间隔，默认500ms
+        rollingStats:
+          timeInMilliseconds: 10000 #设置滑动窗口的统计时间。熔断器使用这个时间。
+          #设置一个滑动统计窗口的桶数量，若numBuckets＝10，timeInMilliseconds＝10000，那么一个bucket的时间即1秒。必须符合rolling window% numberBuckets == 0。默认10
+          numBuckets: 10
+
+      # 降级配置
+      fallback:
+        enabled: true # 是否开启降级，默认开启
+        isolation:
+          semaphore:
+            #maxConcurrentRequests是一个绝对值，无时间窗口，相当于亚毫秒级的，指任意时间点允许的并发数。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。:
+            maxConcurrentRequests: 1000
+
+  #线程池配置
+  threadpool:
+    default:
+      coreSize: 20
+    activityCenter:
+      coreSize: 5
+
 
 feign:
   hystrix:
     enabled: true #使用feign时要配置这个才能开启hystrix
 
-ribbon: # 全局配置（要先打开spring.cloud.loadbalancer.retry.enable=true），如果想为某个实例配置，需要在ribbon前面加服务名（<服务名>.ribbon.<key>=<value>
-  ConnectTimeout: 200
-  ReadTimeout: 150
-  OkToRetryOnAllOperations: true #读所有的请求都进行重试
-  MaxAutoRetriesNextServer: 1  # 最大重试服务器数量(不包括第一台服务器)
-  MaxAutoRetries: 1 #对当前实例的重试次数
+#ribbon: # 全局配置（要先打开spring.cloud.loadbalancer.retry.enable=true），如果想为某个实例配置，需要在ribbon前面加服务名（<服务名>.ribbon.<key>=<value>
+#  ConnectTimeout: 200
+#  ReadTimeout: 150
+#  OkToRetryOnAllOperations: true #读所有的请求都进行重试
+#  MaxAutoRetriesNextServer: 1  # 最大重试服务器数量(不包括第一台服务器)
+#  MaxAutoRetries: 1 #对当前实例的重试次数
 
 logging:
   level:
-    root: debug
+    root: info
+    com:
+      netflix:
+        hystrix: debug
 

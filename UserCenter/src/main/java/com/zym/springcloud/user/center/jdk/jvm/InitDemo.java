@@ -17,8 +17,14 @@ public class InitDemo {
         }
     }
 
-
     public InitDemo() {
+        System.out.println("InitDemo()");
+        System.out.println("InitDemo() a=" + a);
+        System.out.println("InitDemo() b=" + b);
+        throw new RuntimeException("");
+    }
+
+    public InitDemo(String a) {
         System.out.println("InitDemo()");
         System.out.println("InitDemo() a=" + a);
         System.out.println("InitDemo() b=" + b);
@@ -27,9 +33,15 @@ public class InitDemo {
 
     private int b = 23;
 
+    interface  A{
+
+    }
 
     public static void main(String[] args) {
-        InitDemo initDemo = new InitDemo();
+        A a = null;
+//        a.
+
+        InitDemo initDemo = new InitDemo("");
 
         /**
          * 输出：

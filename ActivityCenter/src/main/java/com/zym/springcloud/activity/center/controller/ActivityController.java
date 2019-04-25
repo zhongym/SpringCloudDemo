@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  * Created by zhong on 2017/9/5.
@@ -16,21 +19,51 @@ import java.util.Random;
 @RequestMapping("/api/activity")
 public class ActivityController {
 
-    @Value("${server.port}")
-    private Long port;
+    private boolean ifThrow = true;
+
+    private LongAdder longAdder = new LongAdder();
+
+    @GetMapping("/switch")
+    public String switchON() {
+        ifThrow = !ifThrow;
+        return "ok";
+    }
+
+    private int lockSize = 50;
+
+    private List<Integer> lockList = new ArrayList<>(lockSize);
+
+    {
+        for (int i = 0; i < lockSize; i++) {
+            lockList.add(Integer.valueOf(i));
+        }
+    }
 
     @GetMapping("/{activityId}")
-    public Activity getByActivityId(@PathVariable("activityId") Long activityId) throws InterruptedException {
+    public Activity getByActivityId(@PathVariable("activityId") Long activityId) {
         Activity activity = new Activity();
-        activity.setActivityId(port);
+        activity.setActivityId(activityId);
         activity.setName("活动名称");
         activity.setCode("zs-12");
 
-        System.out.println("--------------------------------------->");
-        if (true){
+        longAdder.add(1);
+        int sum = (int) longAdder.sum();
+        System.out.println("请求次数->:" + sum);
+
+        if (ifThrow) {
             throw new RuntimeException("");
         }
-//        Thread.sleep(500);
+
+        int i = sum % lockSize;
+
+        synchronized (lockList.get(i)) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return activity;
     }
+
 }

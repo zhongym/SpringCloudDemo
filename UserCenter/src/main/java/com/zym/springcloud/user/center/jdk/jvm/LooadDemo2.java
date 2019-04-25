@@ -6,7 +6,7 @@ public class LooadDemo2 {
         System.out.println("LooadDemo2 {}");
     }
 
-    public void sya2(){
+    public static void sya(){
         System.out.println("sya2");
     }
 

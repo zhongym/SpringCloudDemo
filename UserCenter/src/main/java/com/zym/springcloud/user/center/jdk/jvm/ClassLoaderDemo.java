@@ -84,7 +84,6 @@ public class ClassLoaderDemo {
 
         Class<LooadDemo> looadDemoClass = LooadDemo.class;
 
-        int a = LooadDemo.A;
 
 
         Class<?> aClass2 = Class.forName("com.zym.springcloud.user.center.jdk.jvm.LooadDemo");

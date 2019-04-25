@@ -1,44 +1,23 @@
 package com.zym.springcloud.user.center.jdk.jvm;
 
+import java.lang.reflect.Field;
+
 public class LooadDemo {
-    public static int A = 10;
     static {
-        LooadDemo looadDemo = new LooadDemo();
-        System.out.println(looadDemo.A); //输出10
-
-        A = 20;
-        System.out.println(looadDemo.A); //输出20
-
-        System.out.println(looadDemo.B); //输出0
-
-        System.out.println(LooadDemo.B); //输出0
+        System.out.println("LooadDemo{}");
     }
 
-    private static int B = 20;
 
-    /**
-     * <clinit>()方法是编译器根据java源文件中定义的所有类变量的赋值动作和静态代码块按顺序合并产生的
-     *
-     *<clinit>(){
-     *
-     *       private static int A = 10;
-     *       static {
-     *         LooadDemo looadDemo = new LooadDemo();
-     *         System.out.println(looadDemo.A);
-     *
-     *         A = 20;
-     *         System.out.println(looadDemo.A);
-     *
-     *         System.out.println(looadDemo.B);
-     *     }
-     *     private static int B = 20;
-     *}
-     *
-     *
-     */
-    public static void main(String[] args) {
-
-
+    public static void main(String[] args) throws Exception {
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+//        Class<?> aClass = loader.loadClass("com.zym.springcloud.user.center.jdk.jvm.LooadDemo1");
+//        System.out.println(aClass);
+        LooadDemo1 demo1 = new LooadDemo1();
+//        Class<? extends LooadDemo1> aClass = demo1.getClass();
+//        Field demo21 = aClass.getDeclaredField("demo2");
+//        Class<?> type = demo21.getType();
+        demo1.sya2();
+        System.out.println(demo1);
     }
 
 }
