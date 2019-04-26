@@ -7,10 +7,15 @@ public class ClassLoaderDemo {
 
     static class MyClassLoader extends ClassLoader {
         public MyClassLoader() {
-            super(ClassLoader.getSystemClassLoader().getParent());
+            super(null);
         }
 
         private String classPath = "E:\\SpringCloudDemo\\UserCenter\\target\\classes\\";
+
+        @Override
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            return findClass(name);
+        }
 
         @Override
         protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -36,8 +41,9 @@ public class ClassLoaderDemo {
      */
     public static void main(String[] args) throws Exception {
         MyClassLoader myClassLoader = new MyClassLoader();
-        Class<?> aClass = myClassLoader.loadClass("java.lang.Integer");
-        aClass = myClassLoader.loadClass("java.lang.Integer");
+        Class<?> aClass = myClassLoader.loadClass("java.util.ArrayList");
+
+        System.out.println("");
     }
 
     private static void unloadClass() throws ClassNotFoundException {

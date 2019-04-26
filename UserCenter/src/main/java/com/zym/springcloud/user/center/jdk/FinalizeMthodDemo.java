@@ -1,8 +1,5 @@
 package com.zym.springcloud.user.center.jdk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class FinalizeMthodDemo {
 
     public static void main(String[] args) throws InterruptedException {

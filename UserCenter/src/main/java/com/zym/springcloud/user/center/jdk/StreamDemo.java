@@ -2,9 +2,7 @@ package com.zym.springcloud.user.center.jdk;
 
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class StreamDemo {
     public static void main(String[] args) {

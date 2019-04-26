@@ -4,7 +4,6 @@ import com.zym.springcloud.user.center.activityCenter.domain.Activity;
 import com.zym.springcloud.user.center.activityCenter.impl.ActivityServiceFeignClient;
 import com.zym.springcloud.user.center.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +29,7 @@ public class UserActivityController {
 
     @RequestMapping("/get")
     public Map<String, Object> getUserActivity(String type) {
+
 
         longAdder.add(1);
         System.out.println("请求次数->:" + longAdder.sum());
