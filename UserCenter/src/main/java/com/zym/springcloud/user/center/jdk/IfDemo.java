@@ -11,6 +11,10 @@ public class IfDemo {
         IfDemo d = getD();
         if (d == null) {
             System.out.println("null");
+        } else {
+            int a = 20;
+            int b = a * 30;
+            System.out.println(b);
         }
     }
 

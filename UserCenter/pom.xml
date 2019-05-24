@@ -111,6 +111,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--CacheSize是一个谷歌的小项目 java语言通过它可以进行访问本机Cache的信息 -->
+		<dependency>
+			<artifactId>cachesize</artifactId>
+			<groupId>fr.ujm.tse.lt2c.satin</groupId>
+			<version>0.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
