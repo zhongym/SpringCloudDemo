@@ -1,14 +1,11 @@
 package com.zym.springcloud.user.center.jdk;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ConcurrentHashMapDemo {
 
     {
         System.out.println("{}");
+
+        CopyOnWriteArrayListDemo d = new CopyOnWriteArrayListDemo();
     }
 
     public ConcurrentHashMapDemo() {
