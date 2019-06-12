@@ -118,7 +118,12 @@
 			<groupId>fr.ujm.tse.lt2c.satin</groupId>
 			<version>0.2.1</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.0.1-jre</version>
+        </dependency>
+    </dependencies>
 
 	<dependencyManagement>
 		<dependencies>

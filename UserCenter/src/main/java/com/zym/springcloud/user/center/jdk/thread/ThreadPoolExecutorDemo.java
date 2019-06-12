@@ -14,17 +14,38 @@ public class ThreadPoolExecutorDemo {
 
     private static void testSetmMum() {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                5,
-                15,
-                5,
+                2,
+                50,
+                500,
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(5));
+                new LinkedBlockingQueue<>(5), new ThreadFactory() {
+            ThreadFactory threadFactory = Executors.defaultThreadFactory();
 
+            @Override
+            public Thread newThread(Runnable r) {
+                System.out.println("创建线程");
+                return threadFactory.newThread(r);
+            }
+        });
+
+        //初始化所有线程
         executor.prestartAllCoreThreads();
         System.out.println(executor);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        executor.setCorePoolSize(10);
+        //现有线程数量<=新corePoolSize
+        executor.setCorePoolSize(1);
         System.out.println(executor);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(executor.toString());
     }
 
     private static void testnewCachedThreadPool() {
