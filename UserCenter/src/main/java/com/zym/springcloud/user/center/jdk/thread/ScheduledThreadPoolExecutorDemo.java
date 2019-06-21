@@ -4,18 +4,47 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ScheduledThreadPoolExecutorDemo {
 
     public static void main(String[] args) {
-        new ScheduledThreadPoolExecutorDemo().testFixedRate();
+        new ScheduledThreadPoolExecutorDemo().testBase();
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    private void testBase(){
+        ScheduledThreadPoolExecutor threadPool = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
+        threadPool.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread() + "开始执行1 =" + format(new Date()));
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread() + "开始结束执行1 =" + format(new Date()));
+            }
+        }, 0, 5, TimeUnit.SECONDS);
+
+        threadPool.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread() + "开始执行2 =" + format(new Date()));
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread() + "开始结束执行2 =" + format(new Date()));
+            }
+        }, 4, 5, TimeUnit.SECONDS);
     }
 
     @SuppressWarnings("all")

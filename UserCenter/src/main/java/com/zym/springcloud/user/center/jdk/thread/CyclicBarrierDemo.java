@@ -6,6 +6,54 @@ public class CyclicBarrierDemo {
 
     @SuppressWarnings("all")
     public static void main(String[] args) {
+//        base();
+          testInterrupted();
+    }
+
+    private static void testInterrupted() {
+        CyclicBarrier barrier = new CyclicBarrier(3);
+        Thread thread1 = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("所有start完成:" + Thread.currentThread());
+                try {
+                    barrier.await();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread2 = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("所有start完成:" + Thread.currentThread());
+                try {
+                    barrier.await();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread3 = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("所有start完成:" + Thread.currentThread());
+                try {
+                    barrier.await();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        thread1.start();
+        thread2.start();
+        thread1.interrupt();
+    }
+
+    private static void base() {
         int threadCount = 10;
         CyclicBarrier barrier = new CyclicBarrier(threadCount, new Runnable() {
             int count = 0;

@@ -1,7 +1,5 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.thread;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockDemo {

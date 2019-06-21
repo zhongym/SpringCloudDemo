@@ -43,7 +43,9 @@ public class CountDownLatchDemo {
                 doWork();
 
             } catch (InterruptedException ex) {
+
             } finally {
+
                 doneSignal.countDown();
             }
         }
