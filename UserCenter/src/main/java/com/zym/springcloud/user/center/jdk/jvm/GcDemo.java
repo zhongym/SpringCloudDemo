@@ -7,10 +7,37 @@ public class GcDemo {
 
     public static void main(String[] args) throws InterruptedException {
 
-        byte[] arr = new byte[1024 * 1024 * 25];
-        arr = null;
-        byte[] arr1 = new byte[1024 * 1024 * 25];
+       new Thread(){
+           @Override
+           public void run() {
+               while (true){
+                   System.out.println("runing");
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }.start();
 
-        Thread.sleep(1000000);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+
+                    byte[] arr = new byte[1024 * 1024 * 30];
+                }catch (OutOfMemoryError e){
+                    e.printStackTrace();
+                }
+                System.out.println("-----------------");
+            }
+        }.start();
+
     }
 }

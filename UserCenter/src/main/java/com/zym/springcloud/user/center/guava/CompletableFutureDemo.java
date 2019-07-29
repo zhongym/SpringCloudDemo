@@ -38,28 +38,28 @@ public class CompletableFutureDemo {
 //        System.out.println(Thread.currentThread().getName() + map);
 //
 //
-//        //获取两个结果最快的一个
-//        Object o = CompletableFuture.anyOf(
-//                CompletableFuture.supplyAsync(() -> {
-//                    try {
-//                        Thread.sleep(20);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    System.out.println("---------1");
-//                    return "1";
-//                }),
-//                CompletableFuture.supplyAsync(() -> {
-//                    try {
-//                        Thread.sleep(10);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    System.out.println("---------2");
-//                    return "2";
-//                })
-//        ).get(1, TimeUnit.SECONDS);
-//        System.out.println(o);
+        //获取两个结果最快的一个
+        Object o = CompletableFuture.anyOf(
+                CompletableFuture.supplyAsync(() -> {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("---------1");
+                    return "1";
+                }),
+                CompletableFuture.supplyAsync(() -> {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("---------2");
+                    return "2";
+                })
+        ).get(1, TimeUnit.SECONDS);
+        System.out.println(o);
 //
 //
 //        List<Long> longs = CompletableFuture.supplyAsync(() -> {

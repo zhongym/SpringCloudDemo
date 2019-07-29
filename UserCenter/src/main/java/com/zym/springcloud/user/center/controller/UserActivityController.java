@@ -5,6 +5,7 @@ import com.zym.springcloud.user.center.activityCenter.impl.ActivityServiceFeignC
 import com.zym.springcloud.user.center.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -42,5 +43,15 @@ public class UserActivityController {
         map.put("user", user);
         map.put("activity", activity);
         return map;
+    }
+
+    @RequestMapping("/getLong")
+    public Map<String, Object> getUserActivity(@RequestParam("type") Long type) {
+        return new HashMap<>();
+    }
+
+    @RequestMapping("/getLong1")
+    public Map<String, Object> getUserActivity1(Long type) {
+        return new HashMap<>();
     }
 }
