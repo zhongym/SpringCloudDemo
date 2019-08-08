@@ -129,6 +129,13 @@
 			<artifactId>jedis</artifactId>
 			<version>3.1.0-m1</version>
 		</dependency>
+
+		<!--spring-boot 启动类-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-loader</artifactId>
+			<scope>provided</scope>
+		</dependency>
     </dependencies>
 
 	<dependencyManagement>

@@ -10,6 +10,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -34,7 +35,6 @@ public class NIOTimeServer implements TimeServer {
                 selector.select();
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 for (SelectionKey selectionKey : selectionKeys) {
-                    selectionKey.channel()
                     handler(selector, selectionKey);
                 }
                 //清空已经处理完的
@@ -111,7 +111,15 @@ public class NIOTimeServer implements TimeServer {
 
 
     public static void main(String[] args) {
-        new NIOTimeServer().start(800);
+//        new NIOTimeServer().start(800);
+
+        Calendar cale = Calendar.getInstance();
+        Date time1 = cale.getTime();
+
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time1));
+        cale.set(Calendar.DAY_OF_MONTH, 1);
+        Date time = cale.getTime();
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
     }
 
 }

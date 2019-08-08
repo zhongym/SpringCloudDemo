@@ -1,13 +1,13 @@
 package com.zym.springcloud.user.center.jdk.jvm;
 
-import com.zym.springcloud.user.center.jdk.StringDemo;
+import com.zym.springcloud.user.center.jdk.FinalPropertyUpdateDemo;
 
 import java.io.Serializable;
 
 /**
  * @author zhongym
  */
-public class ClassDemo extends StringDemo implements Serializable {
+public class ClassDemo extends FinalPropertyUpdateDemo implements Serializable {
 
     public static final String S_F_S = "s_f_s_zym";
     public final String F_S = "f_s_zym";

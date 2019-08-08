@@ -6,7 +6,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-
+/**
+ * @author zhongym
+ */
 public class NIOTimeClient {
 
     public static void main(String[] args) {
