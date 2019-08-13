@@ -43,10 +43,7 @@ public class AIOTimeServer implements TimeServer {
                         ByteBuffer dest = ByteBuffer.allocate(1024);
                         clientChannel.read(dest, dest, this);
 
-                        attachment.flip();
-                        byte[] bytes = new byte[attachment.remaining()];
-                        attachment.get(bytes);
-                        String content = new String(bytes);
+                        String content = getStr(attachment);
                         System.out.println(content);
                         if ("time".equals(content)) {
                             String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\n";
@@ -60,10 +57,7 @@ public class AIOTimeServer implements TimeServer {
                     }
 
                     private void doWrite(AsynchronousSocketChannel clientChannel, String format) {
-                        byte[] bytes = format.getBytes();
-                        ByteBuffer dest = ByteBuffer.allocate(bytes.length);
-                        dest.put(bytes);
-                        dest.flip();
+                        ByteBuffer dest = getByteBuffer(format);
                         clientChannel.write(dest, dest, new CompletionHandler<Integer, ByteBuffer>() {
                             @Override
                             public void completed(Integer result, ByteBuffer attachment) {
@@ -106,6 +100,21 @@ public class AIOTimeServer implements TimeServer {
             }
         }
 
+    }
+
+    private ByteBuffer getByteBuffer(String s) {
+        byte[] bytes = s.getBytes();
+        ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer;
+    }
+
+    private String getStr(ByteBuffer buffer) {
+        buffer.flip();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return new String(bytes);
     }
 
     public static void main(String[] args) {

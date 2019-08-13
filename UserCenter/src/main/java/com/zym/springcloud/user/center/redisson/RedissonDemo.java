@@ -17,10 +17,13 @@ public class RedissonDemo {
     public static void main(String[] args) {
         Config config = new Config();
         config.useSingleServer().setAddress("redis://127.0.0.1:6379")
+                .setConnectionPoolSize(1)
+                .setConnectionMinimumIdleSize(1)
                 .setPassword("u2CVLsHGYn4dVh6M4qTMr17iaQk");
 
 
         RedissonClient client = Redisson.create(config);
+        client.getKeys();
         RAtomicLong aLong = client.getAtomicLong("atomicLong");
         long l = aLong.addAndGet(1);
         System.out.println(l);

@@ -31,7 +31,8 @@ public class NIOTimeServer implements TimeServer {
             channel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (true) {
-                //就绪列表
+                // 正常情况下此方法会阻塞到有就绪列表才返回
+                // 但是由于底层bug会导致此方法问题马上返回，导致一直循环造成cpu100%
                 selector.select();
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 for (SelectionKey selectionKey : selectionKeys) {
