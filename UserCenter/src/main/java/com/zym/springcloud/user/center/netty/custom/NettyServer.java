@@ -26,7 +26,9 @@ public class NettyServer implements TimeServer {
         bootstrap.group(pGroup, cGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
+                //NioServerSocketChannel
                 .handler(new LoggingHandler(LogLevel.DEBUG))
+                //NioSocketChannel
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
@@ -118,6 +120,11 @@ public class NettyServer implements TimeServer {
                             @Override
                             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                 super.exceptionCaught(ctx, cause);
+                            }
+
+                            @Override
+                            public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
+                                System.out.println("客户端连接已断开：" + ctx.channel().id().asLongText());
                             }
                         });
                     }

@@ -21,21 +21,21 @@ public class NettyClient {
         ChannelFuture future = bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
+                //连接超时 默认30s
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(new NettyMessageDecoder(1024 * 1024, 4, 4));
                         ch.pipeline().addLast(new NettyMessageEncoder());
-                        //超时
+                        //读取超时
                         ch.pipeline().addLast(new ReadTimeoutHandler(30));
                         //握手、安全
                         ch.pipeline().addLast(new MessageToMessageDecoder<NettyMessage>() {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                 //发送握手消息
-                                NettyMessage msg = new NettyMessage();
-                                msg.getHeader().setType(MessageType.LOGIN_REQ.value());
-                                ctx.writeAndFlush(msg);
+                                ctx.writeAndFlush(NettyMessage.build(MessageType.LOGIN_REQ));
                                 System.out.println("发送登录消息");
                             }
 
