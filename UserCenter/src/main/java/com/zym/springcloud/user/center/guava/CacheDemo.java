@@ -8,22 +8,19 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheDemo {
     public static void main(String[] args) throws ExecutionException {
-        Cache<Integer, By> CACHE =
+        Cache<Integer, Integer> CACHE =
                 CacheBuilder.newBuilder()
                       .softValues()
-                        .recordStats()
-                        .expireAfterWrite(1, TimeUnit.SECONDS)
+                        .maximumSize(10)
+                        .expireAfterWrite(2, TimeUnit.SECONDS)
                         .build();
 
         for (int i = 0; i < 1000000000; i++) {
-            CACHE.put(i, new By());
-            System.out.println(i);
+            CACHE.put(i, i);
+            System.out.println(CACHE.asMap());
         }
 
         CACHE.get(1, () -> null);
     }
 
-    static class By {
-        private byte[] arr = new byte[1024 * 1024 * 100];
-    }
 }

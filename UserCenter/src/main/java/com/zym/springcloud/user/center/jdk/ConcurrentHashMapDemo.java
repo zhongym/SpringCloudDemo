@@ -1,5 +1,7 @@
 package com.zym.springcloud.user.center.jdk;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public class ConcurrentHashMapDemo {
 
     {
@@ -37,7 +39,16 @@ public class ConcurrentHashMapDemo {
 //            premiumPhone.put("Sony", "Xperia Z");
 //        }
 
-        ConcurrentHashMapDemo concurrentHashMapDemo = new ConcurrentHashMapDemo();
+//        ConcurrentHashMapDemo concurrentHashMapDemo = new ConcurrentHashMapDemo();
+
+        ConcurrentHashMap<Long, Long> map = new ConcurrentHashMap<>();
+        Long l1 = 521461L;
+        Long l2 = 521461L;
+
+        Long absent = map.putIfAbsent(l1, l1);
+        Long aLong = absent == null ? map.get(l1) : absent;
+        Long aLong1 = map.putIfAbsent(l2, l2);
+        System.out.println(aLong);
 
     }
 }

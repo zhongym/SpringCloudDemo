@@ -24,9 +24,56 @@ eureka:
     registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
 
 
+
 # 配置hystrix的参数  https://github.com/Netflix/Hystrix/wiki/Configuration#execution.isolation.semaphore.maxConcurrentRequests
 hystrix:
   command:
+    # 默认配置
+    default:
+      #执行配置
+      execution:
+        timeout:
+          enabled: true #是否开启超时，默认是true，开启
+        isolation:
+          strategy: SEMAPHORE # 隔离策略 THREAD=线程 ， SEMAPHORE=信号量
+          thread:
+            timeoutInMilliseconds: 1000 #用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。
+            interruptOnTimeout: true #发生超时是是否中断线程，默认是true
+          semaphore:
+            #maxConcurrentRequests是一个绝对值，无时间窗口，相当于亚毫秒级的，指任意时间点允许的并发数。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。:
+            maxConcurrentRequests: 100
+
+      #熔断器配置
+      circuitBreaker:
+        enabled: true #是否启用熔断器，默认是TURE。
+        forceOpen: false  #熔断器强制打开，始终保持打开状态。默认值FLASE
+        forceClosed: false  #熔断器强制关闭，始终保持打关闭状态。默认值FLASE
+        # [metrics.rollingStats.timeInMilliseconds] 秒内，有超过[requestVolumeThreshold]个请求，如果错误率大于[errorThresholdPercentage]%，就会熔断
+        #默认值20.意思是至少有20个请求才进行errorThresholdPercentage错误百分比计算。比如一段时间（10s）内有19个请求全部失败了。错误百分比是100%，但熔断器不会打开，因为requestVolumeThreshold的值是20. 这个参数非常重要，熔断器是否打开首先要满足这个条件，
+        requestVolumeThreshold: 10
+        # 设定错误百分比，默认值50%，例如一段时间（10s）内有100个请求，其中有55个超时或者异常返回了，那么这段时间内的错误百分比是55%，大于了默认值50%，这种情况下触发熔断器-打开。
+        errorThresholdPercentage: 30
+        # 熔断后的重试时间窗口，且在该时间窗口内只允许一次重试。即在熔断开关打开后，在该时间窗口允许有一次重试，如果重试成功，则将重置Health 采样统计并闭合熔断开关实现快速恢复，否则熔断开关还是打开状态，执行快速失败。
+        sleepWindowInMilliseconds: 10000
+
+      #设置关于HystrixCommand执行需要的统计信息
+      metrics:
+        healthSnapshot:
+          intervalInMilliseconds: 500 #记录health 快照（用来统计成功和错误绿）的间隔，默认500ms
+        rollingStats:
+          timeInMilliseconds: 10000 #设置滑动窗口的统计时间。熔断器使用这个时间。
+          #设置一个滑动统计窗口的桶数量，若numBuckets＝10，timeInMilliseconds＝10000，那么一个bucket的时间即1秒。必须符合rolling window% numberBuckets == 0。默认10
+          numBuckets: 10
+
+      # 降级配置
+      fallback:
+        enabled: true # 是否开启降级，默认开启
+        isolation:
+          semaphore:
+            #maxConcurrentRequests是一个绝对值，无时间窗口，相当于亚毫秒级的，指任意时间点允许的并发数。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。:
+            maxConcurrentRequests: 1000
+
+    # 特殊配置
     ActivityServiceFeignClient#getByActivityId(Long):
       #执行配置
       execution:
@@ -35,7 +82,7 @@ hystrix:
         isolation:
           strategy: SEMAPHORE # 隔离策略 THREAD=线程 ， SEMAPHORE=信号量
           thread:
-            timeoutInMilliseconds: 100 #用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。
+            timeoutInMilliseconds: 1000 #用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。
             interruptOnTimeout: true #发生超时是是否中断线程，默认是true
           semaphore:
             #maxConcurrentRequests是一个绝对值，无时间窗口，相当于亚毫秒级的，指任意时间点允许的并发数。当请求达到或超过该设置值后，其其余就会被拒绝。默认值是100。:

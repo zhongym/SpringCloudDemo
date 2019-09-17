@@ -2,10 +2,8 @@ package com.zym.springcloud.user.center.activityCenter.impl;
 
 import com.zym.springcloud.user.center.activityCenter.domain.Activity;
 import feign.hystrix.FallbackFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +35,14 @@ public interface ActivityServiceFeignClient {
 
         @Override
         public Object create(Throwable cause) {
+
             return new ActivityServiceFeignClient() {
 
                 @Override
                 public Activity getByActivityId(Long activityId) {
+
+                    cause.printStackTrace();
+
                     longAdder.add(1);
                     System.out.println("快速错误，降级处理->:" + longAdder.sum());
 

@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
  */
 public class FinalPropertyUpdateDemo {
 
-    //    private final int a;
+//        private final int a;
     private final int a = get();//(null != null ? 0 : 1);
 
     private int get() {
@@ -25,7 +25,7 @@ public class FinalPropertyUpdateDemo {
 
     public static void main(String[] args) throws Exception {
         String a = "ab";
-        System.out.println(a);
+        System.out.println(a.getBytes());
         Field value = a.getClass().getDeclaredField("value");
         value.setAccessible(true);
         char[] o = (char[]) value.get(a);

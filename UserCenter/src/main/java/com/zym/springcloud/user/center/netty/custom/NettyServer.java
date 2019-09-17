@@ -2,6 +2,7 @@ package com.zym.springcloud.user.center.netty.custom;
 
 import com.zym.springcloud.user.center.jdk.io.TimeServer;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -10,6 +11,7 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.traffic.ChannelTrafficShapingHandler;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -19,13 +21,16 @@ public class NettyServer implements TimeServer {
 
     @Override
     public void start(int port) {
-        NioEventLoopGroup pGroup = new NioEventLoopGroup();
-        NioEventLoopGroup cGroup = new NioEventLoopGroup();
+        NioEventLoopGroup pGroup = new NioEventLoopGroup(3);
+        NioEventLoopGroup cGroup = new NioEventLoopGroup(4);
 
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(pGroup, cGroup)
                 .channel(NioServerSocketChannel.class)
+                //配置NioServerSocketChannel参数
                 .option(ChannelOption.SO_BACKLOG, 1024)
+                //配置NioSocketChannel参数
+                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 //NioServerSocketChannel
                 .handler(new LoggingHandler(LogLevel.DEBUG))
                 //NioSocketChannel
@@ -34,6 +39,8 @@ public class NettyServer implements TimeServer {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         //解决tcp粘包和折包、解码
                         ch.pipeline().addLast(new NettyMessageDecoder(1024 * 1024, 4, 4));
+                        //流量整形 每1000毫秒钟限制只能读取1M,写1M流量，超过的放到队列延迟发送
+                        ch.pipeline().addLast(new ChannelTrafficShapingHandler(1024 * 1024,1024 * 1024,1000));
                         //编码
                         ch.pipeline().addLast(new NettyMessageEncoder());
                         //超时
@@ -135,8 +142,7 @@ public class NettyServer implements TimeServer {
             channel = future.channel();
             channel.closeFuture().sync();
 
-        } catch (
-                InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             pGroup.shutdownGracefully();

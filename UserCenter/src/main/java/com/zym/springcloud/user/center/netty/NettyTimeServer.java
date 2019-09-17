@@ -12,6 +12,10 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.EventExecutor;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+import io.netty.util.concurrent.SingleThreadEventExecutor;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,9 @@ public class NettyTimeServer implements TimeServer {
         bootstrap.group(pGroup, cGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
+                .childOption(ChannelOption.SO_SNDBUF, 100)
+                .childOption(ChannelOption.SO_RCVBUF, 1000)
+                .childOption(ChannelOption.TCP_NODELAY, true)
                 .handler(new LoggingHandler(LogLevel.DEBUG))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
@@ -36,6 +43,20 @@ public class NettyTimeServer implements TimeServer {
                         //解决tcp粘包和折包
                         ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
                         ch.pipeline().addLast(new StringDecoder());
+                        ch.pipeline().addLast(new StringDecoder());
+
+                        //性能指标打印
+                        ch.pipeline().addLast(new ChannelHandlerAdapter() {
+                            @Override
+                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                for (EventExecutor nioEventLoop : ctx.executor().parent().children()) {
+                                    int pendingTasks = ((SingleThreadEventExecutor) nioEventLoop).pendingTasks();
+                                    System.out.println(nioEventLoop + "未执行任务数-->" + pendingTasks);
+                                }
+
+                                super.channelActive(ctx);
+                            }
+                        });
 
                         ch.pipeline().addLast(new ChannelHandlerAdapter() {
                             @Override
@@ -44,18 +65,20 @@ public class NettyTimeServer implements TimeServer {
                                 out(content);
                                 if ("time".equals(content)) {
                                     String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\n";
-                                    ctx.write(getByteBuffer(format));
+//                                    ctx.channel().write(getByteBuffer(format));
+                                    ctx.writeAndFlush(getByteBuffer(format));
                                 }
-                                if ("end".equals(content)) {
-                                    channel.close();
-                                }
-                                if ("close".equals(content)) {
-                                    ctx.channel().close();
-                                }
+//                                if ("end".equals(content)) {
+//                                    channel.close();
+//                                }
+//                                if ("close".equals(content)) {
+//                                    ctx.channel().close();
+//                                }
                             }
 
                             @Override
                             public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+                                ctx.fireChannelReadComplete();
                                 ctx.flush();
                             }
 
@@ -66,17 +89,21 @@ public class NettyTimeServer implements TimeServer {
                         });
                     }
                 });
+
+        ChannelFuture future = bootstrap.bind(new InetSocketAddress("127.0.0.1", port));
+        channel = future.channel();
         try {
-            ChannelFuture future = bootstrap.bind(new InetSocketAddress("127.0.0.1", port)).sync();
-
-            channel = future.channel();
-            channel.closeFuture().sync();
-
+            channel.closeFuture()
+                    .sync()
+                    .addListener(new GenericFutureListener<Future<? super Void>>() {
+                        @Override
+                        public void operationComplete(Future<? super Void> future) throws Exception {
+                            pGroup.shutdownGracefully();
+                            cGroup.shutdownGracefully();
+                        }
+                    });
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            pGroup.shutdownGracefully();
-            cGroup.shutdownGracefully();
         }
 
     }

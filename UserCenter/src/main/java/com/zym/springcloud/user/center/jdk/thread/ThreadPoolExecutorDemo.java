@@ -28,6 +28,13 @@ public class ThreadPoolExecutorDemo {
             }
         });
 
+        executor.shutdownNow();
+
+        executor.execute(() -> {
+            System.out.println("--------------");
+        });
+
+
         //初始化所有线程
         executor.prestartAllCoreThreads();
         System.out.println(executor);

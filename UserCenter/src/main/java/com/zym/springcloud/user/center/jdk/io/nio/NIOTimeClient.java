@@ -15,7 +15,6 @@ public class NIOTimeClient {
         try (SocketChannel cChannel = SocketChannel.open();
              Selector selector = Selector.open()) {
             cChannel.configureBlocking(false);
-
             if (cChannel.connect(new InetSocketAddress("127.0.0.1", 800))) {
                 cChannel.register(selector, SelectionKey.OP_READ);
                 doWrite(cChannel, "time");
