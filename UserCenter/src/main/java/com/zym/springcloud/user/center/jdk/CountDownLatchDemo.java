@@ -14,10 +14,12 @@ public class CountDownLatchDemo {
 
         // create and start threads
         for (int i = 0; i < N; ++i) {
-            new Thread(new Worker(startSignal, doneSignal)).start();
+            Thread thread = new Thread(new Worker(startSignal, doneSignal));
+            thread.start();
         }
         doSomethingElse();            // don't let run yet
-        startSignal.countDown();      // let all threads proceed
+        startSignal.countDown();
+        // let all threads proceed
         doSomethingElse();
         doneSignal.await();           // wait for all to finish
     }
