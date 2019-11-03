@@ -11,6 +11,23 @@ spring:
   mvc:
     servlet:
       load-on-startup: 0
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 12000 #从连接池拿连接的超时时间（毫秒），当前12秒，默认30秒
+      idle-timeout: 600000 #空闲超时时间（毫秒），空闲超过这个时间会从连接池里面释放掉，当前10分钟，默认10分钟
+      max-lifetime: 1800000 #数据库连接在连接池中的最大存活时间（毫秒），使用中的不会被释放，当前30分钟，默认30分钟
+      connection-test-query: select 1
+      validation-timeout: 5000 #测试连接有效状态的时间（毫秒），必须小于connection-timeout，当前5秒，默认5秒
+      minimum-idle: 5 #试图保留在连接池中最少的空闲状态连接数量
+      maximum-pool-size: 10 #连接池最大的连接数
+  batch:
+    job:
+      enabled: false
 
 eureka:
   instance:
