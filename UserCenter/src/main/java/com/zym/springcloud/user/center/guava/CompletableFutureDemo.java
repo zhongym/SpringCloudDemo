@@ -32,26 +32,19 @@ public class CompletableFutureDemo {
 
     public static void main(String[] args) {
 
-        long start = System.currentTimeMillis();
-
-        int count = 10;
         List<CompletableFuture<String>> taskList = Lists.newArrayList();
-        for (int i = 0; i < count; i++) {
-            int finalI = i;
-            taskList.add(CompletableFuture.supplyAsync(() -> {
-                System.out.println(Thread.currentThread().getName() + "-> 任务:" + finalI + " start");
-                try {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(Thread.currentThread().getName() + "-> 任务:" + finalI + " end");
-                return finalI + "";
-            }, EXECUTOR));
+        //多个任务
+        for (int i = 0; i < 10; i++) {
+            taskList.add(CompletableFuture.supplyAsync(
+                    () -> {
+                        System.out.println("执行子任务，或者获取数据");
+                        return getData();
+                    }, EXECUTOR));
         }
-        System.out.println(Thread.currentThread().getName() + "->任务全部提交");
-        CompletableFuture.allOf(taskList.toArray(new CompletableFuture[0])).join();
-        System.out.println(Thread.currentThread().getName() + "->全部任务完成");
+        //获取最快完成的结果
+        Object reuslt = CompletableFuture.anyOf(taskList.toArray(new CompletableFuture[0])).join();
+
+        //获取所有结果
         List<String> resultList = taskList.stream()
                 .map(t -> {
                     try {
@@ -63,11 +56,16 @@ public class CompletableFutureDemo {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
+
         System.out.println(Thread.currentThread().getName() + "->结果：" + resultList);
 
         long end = System.currentTimeMillis();
-        System.out.println("用时ms:" + (end - start));
         EXECUTOR.shutdownNow();
+    }
+
+    private static String getData() {
+        return "";
     }
 
     private static void test() throws InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException {

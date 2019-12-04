@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +54,11 @@ public class UserActivityController {
     @Autowired
     private ActivityServiceFeignClient activityServiceFeignClient;
 
+    @Autowired
+    private HttpServletRequest r;
+
     @RequestMapping("/get")
-    public Map<String, Object> getUserActivity(String type) {
+    public Map<String, Object> getUserActivity( String type) {
 
 
         longAdder.add(1);
