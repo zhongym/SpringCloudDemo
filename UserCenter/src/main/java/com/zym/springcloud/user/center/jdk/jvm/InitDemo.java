@@ -1,8 +1,11 @@
 package com.zym.springcloud.user.center.jdk.jvm;
 
+import java.util.HashMap;
+
 public class InitDemo {
 
     private int a = 22;
+    private int c;
 
     {
         System.out.println("{}");
@@ -25,6 +28,7 @@ public class InitDemo {
     }
 
     public InitDemo(String a) {
+        c = 20;
         System.out.println("InitDemo()");
         System.out.println("InitDemo() a=" + a);
         System.out.println("InitDemo() b=" + b);
@@ -33,13 +37,15 @@ public class InitDemo {
 
     private int b = 23;
 
-    interface  A{
+    interface A {
 
     }
 
     public static void main(String[] args) {
         A a = null;
 //        a.
+
+        HashMap<Object, Object> objectObjectHashMap = new HashMap<>(15);
 
         InitDemo initDemo = new InitDemo("");
 

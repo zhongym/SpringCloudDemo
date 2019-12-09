@@ -41,9 +41,10 @@ public class ForkJoinPoolDemo {
             int middle = (start + end) / 2;
             SumTask subTask1 = new SumTask(start, middle);
             SumTask subTask2 = new SumTask(middle + 1, end);
+
             //执行任务
-            subTask1.fork();
-            subTask2.fork();
+            invokeAll(subTask1,subTask2);
+
             //获取子任务的结果聚合
             return subTask1.join() + subTask2.join();
         }
