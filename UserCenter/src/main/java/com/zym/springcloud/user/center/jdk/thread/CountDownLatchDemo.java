@@ -1,4 +1,6 @@
-package com.zym.springcloud.user.center.jdk;
+package com.zym.springcloud.user.center.jdk.thread;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -22,6 +24,12 @@ public class CountDownLatchDemo {
         // let all threads proceed
         doSomethingElse();
         doneSignal.await();           // wait for all to finish
+    }
+
+    @Test
+    public void demo() {
+
+
     }
 
     private static void doSomethingElse() {

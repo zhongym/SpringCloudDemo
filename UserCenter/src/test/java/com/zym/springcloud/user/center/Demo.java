@@ -1,34 +1,37 @@
 package com.zym.springcloud.user.center;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryManagerMXBean;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.RuntimeMXBean;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Demo {
+public class Demo<T> {
+
+    public void a(T t){
+
+    }
+
+    public T b(){
+        return null;
+    }
 
 
     public static void main(String[] args) {
 
-        for (MemoryPoolMXBean memoryPoolMXBean : ManagementFactory.getMemoryPoolMXBeans()) {
-            System.out.println(memoryPoolMXBean.getName());
-            System.out.println(memoryPoolMXBean.getType());
-            System.out.println(memoryPoolMXBean.getUsage());
-            System.out.println(memoryPoolMXBean.getCollectionUsage());
+        List<?> aList = new ArrayList<>();
+//        aList.add()
 
-            System.out.println("---------------");
-        }
-        System.out.println("===============================");
-        for (MemoryManagerMXBean memoryManagerMXBean : ManagementFactory.getMemoryManagerMXBeans()) {
-            System.out.println(memoryManagerMXBean.getName());
-        }
+        List<Object> oList = new ArrayList<>();
+        oList.add(new Demo());
+        Object o = oList.get(0);
 
-        System.out.println("===============================");
-        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        System.out.println(runtimeMXBean.getStartTime());
-        System.out.println(runtimeMXBean.getInputArguments());
-        System.out.println(runtimeMXBean.getVmVersion());
+        List<Demo> dList = new ArrayList<>();
+        Demo demo = dList.get(0);
 
+        Demo<?> objectDemo = new Demo<>();
+        Object b = objectDemo.b();
+
+    }
+
+    private static void run() {
 
     }
 }

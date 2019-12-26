@@ -1,0 +1,29 @@
+server:
+  port: 7011
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 30 #心跳间隔 【服务提供者】每隔多少s向【服务注册中心】发起心跳请求  默认是30秒
+    leaseExpirationDurationInSeconds: 90 #从注册中心剔除服务的失效时间（当【服务注册中心】在这个失效时间没有收到【服务提供者】的心跳，就会从服务列表中移除当前服务）  默认90秒
+  client:
+    service-url:
+      defaultZone: http://localhost:7022/eureka/ #,http://www.zym.com:7011/eureka/
+    register-with-eureka: true # 如果应用是【服务提供者】 是否注册到eureka服务中心，(如果单单只是【服务消费者】，可以不注册到服务中心)
+    fetch-registry: true  # 如果应用是【服务消费者】，要设置为true
+    registry-fetch-interval-seconds: 30 # 【服务提供者】服务列表 本地缓存更新时间，默认30s更新一次
+
+
+spring:
+  application:
+    name: config-server
+  cloud.config:
+    profile: dev
+    name: redis
+    server:
+      bootstrap: true
+      git:
+        uri: file:E:\laimi-config-repo
+        #uri: http://gitlab.51dinghuo.cc:8015/java/laimi-config-repo.git
+        #username: test
+        #password: 11111111
+        searchPaths: zym

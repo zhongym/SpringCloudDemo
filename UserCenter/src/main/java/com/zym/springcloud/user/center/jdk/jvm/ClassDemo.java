@@ -36,6 +36,7 @@ public class ClassDemo extends FinalPropertyUpdateDemo implements Serializable {
         System.out.println(S_F_S);
 
         ClassDemo d = new ClassDemo();
+
         String zym = d.sout("zym");
         System.out.println(zym);
     }
