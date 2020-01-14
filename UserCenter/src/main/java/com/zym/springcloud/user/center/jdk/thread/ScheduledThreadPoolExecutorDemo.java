@@ -9,11 +9,25 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ScheduledThreadPoolExecutorDemo {
+    private static int i = 0;
 
     public static void main(String[] args) {
-        new ScheduledThreadPoolExecutorDemo().testBase();
+        ScheduledThreadPoolExecutor threadPool = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
+        threadPool.scheduleWithFixedDelay(()->{
+            if (i++>5){
+                throw new RuntimeException("报错");
+            }
+            System.out.println("------------>");
+        },0,1,TimeUnit.SECONDS);
+//
+//        new ScheduledThreadPoolExecutorDemo().testBase();
+//        try {
+//            Thread.currentThread().join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         try {
-            Thread.currentThread().join();
+            Thread.sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

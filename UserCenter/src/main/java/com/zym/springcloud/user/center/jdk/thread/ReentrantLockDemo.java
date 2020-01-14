@@ -5,10 +5,46 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ReentrantLockDemo {
 
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock();
+
+        new Thread("thread1") {
+            @Override
+            public void run() {
+                lock.lock();
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                lock.unlock();
+
+            }
+
+        }.start();
+
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        new Thread("thread2") {
+            @Override
+            public void run() {
+                lock.lock();
+
+            }
+        }.start();
+    }
+
+
     private static ReentrantLock lock = new ReentrantLock(true);
     private static Condition condition = lock.newCondition();
 
-    public static void main(String[] args) throws Exception {
+    public static void main1(String[] args) throws Exception {
 
         new Thread("thread1") {
             @Override

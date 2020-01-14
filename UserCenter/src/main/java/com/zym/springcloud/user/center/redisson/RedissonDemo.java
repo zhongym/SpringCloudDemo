@@ -48,5 +48,11 @@ public class RedissonDemo {
         BatchResult<?> execute = batch.execute();
         List<?> responses = execute.getResponses();
 
+
+        RLock lock = client.getLock("");
+        lock.lock();
+        lock.unlock();
+
+        client.getHyperLogLog("");
     }
 }

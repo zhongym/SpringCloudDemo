@@ -200,6 +200,18 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <dependency>
+            <!-- spring integration -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+        </dependency>
+        <dependency>
+            <!-- spring integration与redis结合，实现redis分布式锁 -->
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-redis</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

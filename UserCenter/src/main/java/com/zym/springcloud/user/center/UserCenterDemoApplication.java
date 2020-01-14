@@ -7,6 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @SpringBootApplication
 @EnableAsync(/*mode = AdviceMode.ASPECTJ*/)
 //@EnableLoadTimeWeaving
+@EnableScheduling
 public class UserCenterDemoApplication {
 
     public static void main(String[] args) throws Exception {
