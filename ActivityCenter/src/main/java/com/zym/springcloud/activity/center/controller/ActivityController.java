@@ -1,5 +1,6 @@
 package com.zym.springcloud.activity.center.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.zym.springcloud.activity.center.domain.Activity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,4 +67,32 @@ public class ActivityController {
         return activity;
     }
 
+    @GetMapping("/test")
+    public Activity test(Page p, Vo v) {
+        return null;
+    }
+
+    public static class Page{
+        private int page;
+
+        public int getPage() {
+            return page;
+        }
+
+        public void setPage(int page) {
+            this.page = page;
+        }
+    }
+
+    public static class Vo{
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }

@@ -4,7 +4,12 @@ server:
 spring:
   application:
     name: activityCenter
-
+  cloud:
+    sentinel:
+      transport:
+        port: 8719 # 指定客户端监控 API 的端口（默认是 8719）
+        dashboard: localhost:8080 #sentinel指定控制台地址和端口
+      httpMethodSpecify: true #资源名称拼上请求方法
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 30 #心跳间隔  这里配置 10 默认是30秒
@@ -12,3 +17,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:7022/eureka/  #,http://www.zym.com:9000/eureka/
+logging:
+  level:
+   root: debug
