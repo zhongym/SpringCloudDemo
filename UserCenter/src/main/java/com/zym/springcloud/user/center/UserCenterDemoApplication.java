@@ -2,10 +2,8 @@ package com.zym.springcloud.user.center;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -13,12 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EnableFeignClients
-@EnableCircuitBreaker
-@EnableHystrix
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableAsync(/*mode = AdviceMode.ASPECTJ*/)
-//@EnableLoadTimeWeaving
 @EnableScheduling
 public class UserCenterDemoApplication {
 

@@ -10,9 +10,9 @@ public class ScheduledDemo {
 
     @Scheduled(fixedDelay = 1000)
     public void partSyncYjpProduct() {
-        if (i++ > 10) {
-            throw new RuntimeException("");
-        }
-        System.out.println("---------------------------");
+//        if (i++ > 10) {
+//            throw new RuntimeException("");
+//        }
+//        System.out.println("---------------------------");
     }
 }

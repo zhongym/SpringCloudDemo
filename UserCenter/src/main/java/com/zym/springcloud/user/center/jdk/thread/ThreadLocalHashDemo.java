@@ -12,5 +12,7 @@ public class ThreadLocalHashDemo {
         local1.set("1");
         local2.set("1");
         local3.set("1");
+
+        ThreadLocal<String> initial = ThreadLocal.withInitial(() -> "aa");
     }
 }

@@ -1,7 +1,6 @@
 package com.zym.springcloud.user.center.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.discovery.EurekaClient;
 import com.zym.springcloud.user.center.domain.User;
 import com.zym.springcloud.user.center.event.OrderEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,8 @@ import java.io.IOException;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private EurekaClient eurekaClient;
+//    @Autowired
+//    private EurekaClient eurekaClient;
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -39,8 +38,8 @@ public class UserController {
         a(request);
         User user = new User();
         user.setUserId(130L);
-        user.setUserName("port:" + discoveryClient.getLocalServiceInstance().getPort());
-        System.out.println(discoveryClient.getLocalServiceInstance().getHost());
+//        user.setUserName("port:" + discoveryClient.getLocalServiceInstance().getPort());
+//        System.out.println(discoveryClient.getLocalServiceInstance().getHost());
         return user;
     }
 

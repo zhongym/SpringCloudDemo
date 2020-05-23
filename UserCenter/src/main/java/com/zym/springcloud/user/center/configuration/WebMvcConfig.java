@@ -2,19 +2,17 @@ package com.zym.springcloud.user.center.configuration;
 
 import feign.Feign;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.web.WebMvcRegistrations;
-import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @Configuration
 @ConditionalOnClass({Feign.class})
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -23,15 +21,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .allowedOrigins("http://foo.example1");
     }
 
-    @Bean
-    public WebMvcRegistrations feignWebRegistrations() {
-        return new WebMvcRegistrationsAdapter() {
-            @Override
-            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-                return new FeignFilterRequestMappingHandlerMapping();
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcRegistrations feignWebRegistrations() {
+//        return new WebMvcRegistrationsAdapter() {
+//            @Override
+//            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+//                return new FeignFilterRequestMappingHandlerMapping();
+//            }
+//        };
+//    }
 
     /**
      * 默认情况下，springmvc会将所有带有RequestMapping注解的bean都当作controller进行映射，

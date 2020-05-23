@@ -51,19 +51,19 @@ public class ActivityController {
         int sum = (int) longAdder.sum();
         System.out.println("请求次数->:" + sum);
 
-        if (ifThrow) {
-            throw new RuntimeException("");
-        }
-
-        int i = sum % lockSize;
-
-        synchronized (lockList.get(i)) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (ifThrow) {
+//            throw new RuntimeException("");
+//        }
+//
+//        int i = sum % lockSize;
+//
+//        synchronized (lockList.get(i)) {
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return activity;
     }
 

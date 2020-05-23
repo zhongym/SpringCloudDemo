@@ -1,6 +1,5 @@
 package com.zym.springcloud.user.center.jdk.thread;
 
-import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +31,6 @@ public class SemaphoreDemo {
     private static Semaphore semaphore1 = new Semaphore(0);
     private static Semaphore semaphore2 = new Semaphore(0);
 
-    @Test
     public void test1() {
         final Thread thread1 = new Thread(new Runnable() {
             @Override

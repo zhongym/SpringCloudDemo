@@ -1,9 +1,9 @@
 server:
-  port: 8020
+  port: 8021
 
 spring:
   application:
-    name: activityCenter
+    name: userCenter
   cloud:
     sentinel:
       transport:
@@ -22,21 +22,14 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848 #Nacos Server 地址
         # server-addr: nacos.internal.perfectdiary.com:8848 #Nacos Server 地址
-        username: nacos
-        password : nacos
       config:
       #  name: activityCenter # 默认服务名
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
-        username: nacos
-        password: nacos
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 30 #心跳间隔  这里配置 10 默认是30秒
-    leaseExpirationDurationInSeconds: 90 #从注册中心剔除服务的检测间隔  这里配置30 默认90秒
-  client:
-    service-url:
-      defaultZone: http://localhost:7022/eureka/  #,http://www.zym.com:9000/eureka/
+feign:
+  sentinel:
+    enabled: true # 开启 sentinel 对feign的监控
+
 logging:
   level:
    root: debug
