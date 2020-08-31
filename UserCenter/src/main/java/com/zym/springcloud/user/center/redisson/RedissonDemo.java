@@ -2,6 +2,8 @@ package com.zym.springcloud.user.center.redisson;
 
 import org.redisson.Redisson;
 import org.redisson.api.*;
+import org.redisson.client.protocol.RedisCommands;
+import org.redisson.command.CommandExecutor;
 import org.redisson.config.Config;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class RedissonDemo {
                 .setPassword("u2CVLsHGYn4dVh6M4qTMr17iaQk");
 
 
-        RedissonClient client = Redisson.create(config);
+        Redisson client = (Redisson) Redisson.create(config);
         client.getKeys();
         RAtomicLong aLong = client.getAtomicLong("atomicLong");
         long l = aLong.addAndGet(1);
@@ -54,5 +56,9 @@ public class RedissonDemo {
         lock.unlock();
 
         client.getHyperLogLog("");
+
+        CommandExecutor commandExecutor = client.getCommandExecutor();
+        RFuture<Boolean> str1 = commandExecutor.writeAsync("str", RedisCommands.SISMEMBER, "123");
+        Object str = commandExecutor.read("str", RedisCommands.GET);
     }
 }
