@@ -31,14 +31,14 @@ public class OAuth2AuthenticationFilter extends AbstractAuthenticationProcessing
         //取参数
         OAuth2Request oAuth2Request = objectMapper.readValue(request.getInputStream(), OAuth2Request.class);
 
-        OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request);
+        OAuth2AuthenticationToken oAuth2Authentication = new OAuth2AuthenticationToken(oAuth2Request);
         setDetails(request, oAuth2Authentication);
 
         return this.getAuthenticationManager().authenticate(oAuth2Authentication);
     }
 
     protected void setDetails(HttpServletRequest request,
-                              OAuth2Authentication authRequest) {
+                              OAuth2AuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 }

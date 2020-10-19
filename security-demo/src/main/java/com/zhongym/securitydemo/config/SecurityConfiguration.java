@@ -1,6 +1,5 @@
 package com.zhongym.securitydemo.config;
 
-import com.zhongym.securitydemo.jwt.JwtSecurityConfigurer;
 import com.zhongym.securitydemo.oauth2.OAuth2SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -61,7 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/auth/oauth2");
+//        web.ignoring().antMatchers("/auth/oauth2");
     }
 
     @Override
@@ -70,9 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //无条件允许访问
                 .antMatchers(
-                        "/auth/oauth2",
-                        "/hello",
-                        "/error"
+                        "/auth/oauth2"
                 ).permitAll()
                 ////需认证通过
                 .anyRequest().authenticated()
@@ -83,12 +80,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()
                 .apply(oAuth2SecurityConfiguration);
     }
-
-
-//    @Bean
-//    public JwtSecurityConfigurer jwtSecurityConfigurer() {
-//        return new JwtSecurityConfigurer();
-//    }
 
     @Autowired
     private OAuth2SecurityConfiguration oAuth2SecurityConfiguration;

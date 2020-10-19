@@ -6,17 +6,17 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class OAuth2Authentication extends AbstractAuthenticationToken {
+public class OAuth2AuthenticationToken extends AbstractAuthenticationToken {
 
     private FrontUser principal;
     private OAuth2Request request;
 
-    public OAuth2Authentication(OAuth2Request request) {
+    public OAuth2AuthenticationToken(OAuth2Request request) {
         super(null);
         this.request = request;
     }
 
-    public OAuth2Authentication(FrontUser principal, Collection<? extends GrantedAuthority> authorities) {
+    public OAuth2AuthenticationToken(FrontUser principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
     }
