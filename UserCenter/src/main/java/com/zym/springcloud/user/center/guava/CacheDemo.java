@@ -3,8 +3,8 @@ package com.zym.springcloud.user.center.guava;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListenableFutureTask;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.*;
@@ -46,26 +46,46 @@ public class CacheDemo {
                             @Override
                             public ListenableFuture<Object> reload(String key, Object oldValue) throws Exception {
                                 System.out.println(Thread.currentThread().getName() + "-->异步刷新");
-                                ListenableFutureTask<Object> task = ListenableFutureTask.create(new Callable<Object>() {
-                                    @Override
-                                    public Object call() throws Exception {
-                                        return get();
-                                    }
-                                });
-                                executor.submit(task);
-                                return task;
+//                                ListenableFutureTask<Object> task = ListenableFutureTask.create(new Callable<Object>() {
+//                                    @Override
+//                                    public Object call() throws Exception {
+//                                        return get();
+//                                    }
+//                                });
+//                                executor.submit(task);
+//                                return task;
+                                return Futures.immediateFuture(get());
                             }
                         });
 
-        System.out.println(CACHE1.get("a"));
-        System.out.println(CACHE1.get("a"));
-        TimeUnit.SECONDS.sleep(3);
-        System.out.println(CACHE1.get("a"));
-        TimeUnit.MILLISECONDS.sleep(301);
-        System.out.println(CACHE1.get("a"));
+//        System.out.println(CACHE1.get("a"));
+//        System.out.println(CACHE1.get("a"));
+//        TimeUnit.SECONDS.sleep(3);
+//        System.out.println(CACHE1.get("a"));
+//        TimeUnit.MILLISECONDS.sleep(301);
+//        System.out.println(CACHE1.get("a"));
+//
+//        TimeUnit.SECONDS.sleep(5);
+//        System.out.println(CACHE1.get("a"));
 
-        TimeUnit.SECONDS.sleep(5);
-        System.out.println(CACHE1.get("a"));
+        System.out.println(Thread.currentThread().getName() + "--->" + CACHE1.get("a"));
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println(Thread.currentThread().getName() + "--->" + CACHE1.get("a"));
+        System.out.println(Thread.currentThread().getName() + "--->" + CACHE1.get("a"));
+        TimeUnit.SECONDS.sleep(1);
+        for (int j = 0; j < 3; j++) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        System.out.println(Thread.currentThread().getName() + "--->" + CACHE1.get("a"));
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+
 
     }
 
@@ -73,7 +93,7 @@ public class CacheDemo {
 
     private static Object get() {
         try {
-            TimeUnit.MILLISECONDS.sleep(300);
+            TimeUnit.MILLISECONDS.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
